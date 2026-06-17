@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#211631">
+<title>Mapa da Mulher Posicionada</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23211631'/%3E%3Cpath d='M50 18 L58 42 L82 50 L58 58 L50 82 L42 58 L18 50 L42 42 Z' fill='%23E6AFFC'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,600;1,700&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --dark:#211631;
+    --dark-soft:#2b1f3f;
+    --mid:#E6AFFC;
+    --mid-deep:#d98ef7;
+    --pale:#F7E7FE;
+    --white:#FFFFFF;
+    --ink:#323232;
+    --ink-soft:#5a5560;
+    --on-dark:#FFFFFF;
+    --danger:#9c3b5e;
+    --shadow: 0 14px 34px rgba(33,22,49,0.16);
+    --radius-lg: 22px;
+    --radius-md: 16px;
+    --radius-sm: 10px;
+    font-size: 16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Poppins', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(180deg,#f2e9fb 0%, #e7d8f5 100%);
+    color:var(--ink);
+    min-height:100vh;
+    min-height:100dvh;
+    display:flex;
+    justify-content:center;
+    -webkit-font-smoothing:antialiased;
+  }
+  .serif{ font-family:'Playfair Display', Georgia, serif; font-style:italic; }
+
+  .app{
+    width:100%;
+    max-width:480px;
+    min-height:100vh;
+    min-height:100dvh;
+    background:var(--white);
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    box-shadow: var(--shadow);
+    overflow:hidden;
+  }
+
+  /* ---------- HEADER ---------- */
+  .app-header{
+    flex-shrink:0;
+    background:var(--white);
+    padding:18px 20px 14px;
+    position:relative;
+    border-bottom:1px solid #f1e4fa;
+  }
+  .header-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    position:relative;
+  }
+  .sparkle{
+    color:var(--dark);
+    font-size:15px;
+    line-height:1;
+    flex-shrink:0;
+  }
+  .sparkle.big{ font-size:20px; }
+  .app-title{
+    font-weight:700;
+    font-size:21px;
+    letter-spacing:-0.2px;
+    color:var(--dark);
+    text-align:center;
+    margin:0;
+  }
+  .app-logo{
+    display:block;
+    margin:0 auto 12px;
+    width:80px;
+    height:auto;
+    border-radius:16px;
+    box-shadow:0 6px 16px rgba(33,22,49,0.3);
+  }
+
+  /* ---------- MAIN / PANELS ---------- */
+  .app-main{
+    flex:1;
+    overflow-y:auto;
+    padding:18px 16px 28px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .panel{ display:none; animation: fadein .25s ease; }
+  .panel.active{ display:block; }
+  @keyframes fadein{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  .section-card{
+    background:var(--pale);
+    border-radius:var(--radius-lg);
+    padding:20px 16px 22px;
+  }
+  .section-head{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:4px;
+  }
+  .section-icon{
+    width:40px;
+    height:40px;
+    flex-shrink:0;
+    color:var(--dark);
+  }
+  .section-icon svg{ width:100%; height:100%; }
+  .section-title{
+    font-weight:700;
+    font-size:18px;
+    color:var(--dark);
+    margin:0;
+    letter-spacing:0.2px;
+  }
+  .section-sub{
+    text-align:center;
+    font-weight:600;
+    font-size:13px;
+    color:var(--dark);
+    margin:10px 0 18px;
+  }
+
+  /* progress */
+  .progress-wrap{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:18px;
+  }
+  .progress-track{
+    flex:1;
+    height:9px;
+    background:rgba(33,22,49,0.12);
+    border-radius:8px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    background:var(--dark);
+    border-radius:8px;
+    width:0%;
+    transition:width .3s ease;
+  }
+  .progress-label{
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--dark);
+    white-space:nowrap;
+  }
+
+  /* checklist rows */
+  .check-list{ display:flex; flex-direction:column; gap:16px; }
+  .check-row{
+    display:flex;
+    align-items:flex-start;
+    gap:13px;
+    cursor:pointer;
+    user-select:none;
+  }
+  .check-input{ position:absolute; opacity:0; width:0; height:0; }
+  .check-box{
+    width:27px;
+    height:27px;
+    border:2px solid var(--dark);
+    border-radius:8px;
+    background:var(--white);
+    flex-shrink:0;
+    margin-top:1px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:background .18s, border-color .18s, transform .15s;
+  }
+  .check-row:active .check-box{ transform:scale(0.92); }
+  .check-icon{
+    width:16px; height:16px;
+    color:var(--white);
+    opacity:0;
+    transform:scale(0.4);
+    transition:opacity .12s, transform .12s;
+  }
+  .check-input:checked + .check-box{
+    background:var(--dark);
+    border-color:var(--dark);
+  }
+  .check-input:checked + .check-box .check-icon{
+    opacity:1;
+    transform:scale(1);
+  }
+  .check-text{ flex:1; min-width:0; }
+  .check-title{
+    display:block;
+    font-weight:700;
+    font-size:14.5px;
+    color:var(--ink);
+    line-height:1.4;
+    transition: opacity .2s;
+  }
+  .check-desc{
+    display:block;
+    font-style:italic;
+    font-weight:400;
+    font-size:13px;
+    color:var(--ink);
+    line-height:1.4;
+    margin-top:2px;
+    transition: opacity .2s;
+  }
+  .check-row.done .check-title{ text-decoration:line-through; opacity:.55; }
+  .check-row.done .check-desc{ opacity:.55; }
+
+  /* dark banner (Importância de Cada Passo) */
+  .dark-banner{
+    background:var(--dark);
+    border-radius:var(--radius-lg);
+    padding:30px 18px 22px;
+    margin-top:22px;
+    position:relative;
+  }
+  .banner-pill{
+    position:absolute;
+    top:-16px;
+    left:50%;
+    transform:translateX(-50%);
+    background:var(--mid);
+    color:var(--dark);
+    padding:9px 22px;
+    border-radius:30px;
+    font-weight:700;
+    font-style:italic;
+    font-family:'Playfair Display', Georgia, serif;
+    font-size:15px;
+    white-space:nowrap;
+    box-shadow:0 4px 10px rgba(0,0,0,0.12);
+  }
+  .banner-text{
+    color:var(--on-dark);
+    font-size:14px;
+    line-height:1.6;
+    margin:0;
+    text-align:left;
+  }
+
+  /* quote card */
+  .quote-card{
+    background:var(--dark);
+    border:2px solid var(--mid);
+    border-radius:18px;
+    padding:16px 16px 16px 14px;
+    margin-top:16px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .quote-icon{
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    background:var(--white);
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .quote-icon svg{ width:26px; height:26px; }
+  .quote-text{
+    color:var(--on-dark);
+    font-family:'Playfair Display', Georgia, serif;
+    font-style:italic;
+    font-size:13.5px;
+    line-height:1.5;
+    margin:0;
+  }
+  .quote-text strong{ font-weight:700; }
+
+  /* clear buttons */
+  .clear-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    width:100%;
+    margin-top:20px;
+    padding:12px;
+    border-radius:30px;
+    border:1.5px solid var(--dark);
+    background:transparent;
+    color:var(--dark);
+    font-family:inherit;
+    font-weight:600;
+    font-size:13px;
+    cursor:pointer;
+  }
+  .clear-btn svg{ width:15px; height:15px; }
+  .clear-btn:active{ background:var(--pale); }
+
+  /* notes panel */
+  .notes-intro{
+    font-size:13px;
+    color:var(--ink-soft);
+    line-height:1.55;
+    margin:0 2px 18px;
+  }
+  .notes-block{ margin-bottom:18px; }
+  .notes-label-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:8px;
+    padding:0 2px;
+  }
+  .notes-label{
+    font-weight:700;
+    font-size:13.5px;
+    color:var(--dark);
+  }
+  .save-indicator{
+    font-size:11.5px;
+    font-weight:600;
+    color:#5a8f6b;
+    opacity:0;
+    transition:opacity .25s;
+    display:flex;
+    align-items:center;
+    gap:4px;
+  }
+  .save-indicator.show{ opacity:1; }
+  .save-indicator svg{ width:12px; height:12px; }
+  .notes-datetime-row{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    margin-bottom:9px;
+  }
+  .datetime-icon{
+    width:16px; height:16px;
+    color:var(--dark);
+    flex-shrink:0;
+  }
+  .datetime-icon svg{ width:100%; height:100%; }
+  .notes-datetime{
+    flex:1;
+    min-width:0;
+    max-width:210px;
+    background:var(--white);
+    border:1.5px solid var(--dark);
+    border-radius:10px;
+    padding:6px 8px;
+    font-family:inherit;
+    font-size:12.5px;
+    color:var(--ink);
+  }
+  .notes-datetime:focus{ outline:2px solid var(--mid-deep); outline-offset:1px; }
+  .now-btn{
+    flex-shrink:0;
+    background:var(--mid);
+    border:1.5px solid var(--dark);
+    color:var(--dark);
+    border-radius:10px;
+    padding:6px 12px;
+    font-family:inherit;
+    font-weight:600;
+    font-size:12px;
+    cursor:pointer;
+  }
+  .now-btn:active{ background:var(--mid-deep); }
+  .notes-textarea{
+    width:100%;
+    min-height:150px;
+    background:var(--mid);
+    border:none;
+    border-radius:var(--radius-md);
+    padding:16px;
+    font-family:inherit;
+    font-size:14.5px;
+    color:var(--ink);
+    line-height:1.55;
+    resize:vertical;
+  }
+  .notes-textarea::placeholder{ color:#5d3f6f; opacity:0.65; }
+  .notes-textarea:focus{ outline:2px solid var(--dark); outline-offset:2px; }
+
+  /* bottom nav */
+  .bottom-nav{
+    flex-shrink:0;
+    display:flex;
+    background:var(--dark);
+    padding:8px 6px calc(8px + env(safe-area-inset-bottom));
+    gap:3px;
+  }
+  .nav-btn{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:3px;
+    padding:7px 2px;
+    border-radius:13px;
+    border:none;
+    background:transparent;
+    color:rgba(255,255,255,0.55);
+    font-family:inherit;
+    cursor:pointer;
+    transition:background .15s, color .15s;
+  }
+  .nav-btn svg{ width:19px; height:19px; }
+  .nav-btn span{ font-size:10px; font-weight:600; }
+  .nav-btn.active{ background:rgba(230,175,252,0.18); color:var(--mid); }
+
+  /* modals */
+  .modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(20,12,32,0.55);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    z-index:50;
+    opacity:1;
+    transition:opacity .18s;
+  }
+  .modal-overlay.hidden{ display:none; }
+  .modal-card{
+    background:var(--white);
+    border-radius:20px;
+    max-width:420px;
+    width:100%;
+    max-height:85vh;
+    overflow-y:auto;
+    padding:22px 20px 24px;
+    position:relative;
+  }
+  .modal-close{
+    position:absolute;
+    top:14px;
+    right:14px;
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    border:none;
+    background:var(--pale);
+    color:var(--dark);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
+  .modal-close svg{ width:14px; height:14px; }
+  .modal-title{
+    font-weight:700;
+    font-size:18px;
+    color:var(--dark);
+    margin:0 30px 16px 0;
+  }
+
+  .info-intro-row{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    margin-bottom:20px;
+  }
+  .info-intro-icon{ width:24px; height:24px; flex-shrink:0; color:var(--dark); margin-top:2px; }
+  .info-intro-icon svg{ width:100%; height:100%; }
+  .info-intro-text{ font-size:13.5px; line-height:1.6; color:var(--ink); margin:0; }
+
+  .usar-banner{
+    background:var(--dark);
+    color:var(--white);
+    text-align:center;
+    font-weight:700;
+    font-size:14px;
+    padding:11px;
+    border-radius:14px 14px 0 0;
+  }
+  .usar-grid{
+    background:var(--mid);
+    border-radius:0 0 16px 16px;
+    padding:14px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:20px;
+  }
+  .usar-card{
+    background:var(--white);
+    border:1.5px solid var(--dark);
+    border-radius:10px;
+    padding:11px 12px;
+    font-size:12.5px;
+    line-height:1.55;
+    color:var(--ink);
+  }
+  .usar-card strong{ font-weight:700; }
+
+  .lembrete-pill{
+    background:var(--mid);
+    color:var(--dark);
+    display:inline-block;
+    padding:7px 20px;
+    border-radius:30px;
+    font-weight:700;
+    font-style:italic;
+    font-family:'Playfair Display', Georgia, serif;
+    font-size:14px;
+    margin-bottom:-14px;
+    margin-left:14px;
+    position:relative;
+    z-index:1;
+  }
+  .lembrete-box{
+    background:var(--dark);
+    color:var(--white);
+    border-radius:16px;
+    padding:24px 16px 16px;
+    font-size:13px;
+    line-height:1.6;
+  }
+  .storage-note{
+    margin-top:18px;
+    font-size:11.5px;
+    color:var(--ink-soft);
+    text-align:center;
+    line-height:1.5;
+  }
+
+  /* confirm modal */
+  .confirm-card{ text-align:center; max-width:320px; }
+  .confirm-icon{
+    width:46px; height:46px;
+    border-radius:50%;
+    background:var(--pale);
+    color:var(--dark);
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto 14px;
+  }
+  .confirm-icon svg{ width:24px; height:24px; }
+  .confirm-text{ font-size:13.5px; color:var(--ink); line-height:1.55; margin:0 0 20px; }
+  .confirm-actions{ display:flex; gap:10px; }
+  .btn{
+    flex:1;
+    padding:11px;
+    border-radius:30px;
+    font-family:inherit;
+    font-weight:600;
+    font-size:13.5px;
+    cursor:pointer;
+    border:1.5px solid var(--dark);
+  }
+  .btn-cancel{ background:var(--white); color:var(--dark); }
+  .btn-danger{ background:var(--dark); color:var(--white); }
+  .btn-cancel:active{ background:var(--pale); }
+  .btn-danger:active{ background:var(--dark-soft); }
+
+  /* toast */
+  .toast{
+    position:fixed;
+    bottom:90px;
+    left:50%;
+    transform:translateX(-50%) translateY(10px);
+    background:var(--dark);
+    color:var(--white);
+    padding:11px 20px;
+    border-radius:30px;
+    font-size:13px;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.25);
+    z-index:60;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s, transform .25s;
+  }
+  .toast svg{ width:15px; height:15px; flex-shrink:0; color:var(--mid); }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  @media (min-width:481px){
+    body{ padding:24px 0; }
+    .app{ min-height:calc(100vh - 48px); border-radius:28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <header class="app-header">
+    <img class="app-logo" src="data:image/png;base64,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" alt="Logo do Programa Posicionadas">
+    <div class="header-row">
+      <span class="sparkle big">✦</span>
+      <span class="sparkle">✦</span>
+      <h1 class="app-title">Mapa da Mulher<br>Posicionada</h1>
+      <span class="sparkle">✦</span>
+    </div>
+  </header>
+
+  <main class="app-main">
+
+    <!-- PAINEL 1 — INÍCIO / COMO USAR -->
+    <section class="panel active" id="panel-home">
+      <div class="section-card">
+        <div class="info-intro-row">
+          <span class="info-intro-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,5"/></svg>
+          </span>
+          <p class="info-intro-text">O <strong>Mapa da Mulher Posicionada</strong> é uma ferramenta prática para ajudar você a desenvolver e manter sua autoconfiança e comunicação assertiva no dia a dia. Marque um tique <strong>(✓)</strong> a cada ação concluída, acompanhando sua evolução de forma simples e objetiva.</p>
+        </div>
+
+        <div class="usar-banner">Como Usar o Mapa:</div>
+        <div class="usar-grid">
+          <div class="usar-card"><strong>Pela manhã:</strong> reserve 2 minutos para ler o checklist e lembrar-se das ações que deseja praticar ao longo do dia. Isso ajudará a manter o foco e a intenção clara.</div>
+          <div class="usar-card"><strong>Ou à noite:</strong> revise o checklist e reflita se conseguiu colocar em prática as ações propostas. Identifique seus progressos e onde pode melhorar.</div>
+          <div class="usar-card"><strong>Organize-se mentalmente:</strong> mesmo que nem todas as ações tenham sido realizadas, prepare-se para o dia seguinte com o compromisso de tentar novamente.</div>
+          <div class="usar-card"><strong>Não precisa fazer pela manhã e à noite.</strong> Escolha o período do dia que encaixe melhor com sua rotina para fazer, um ou outro. A proposta é que você consiga executar essa tarefa rapidamente.</div>
+        </div>
+
+        <span class="lembrete-pill">Lembrete</span>
+        <div class="lembrete-box">
+          Com o tempo, dia após dia, você desenvolverá o hábito de aplicar essas atitudes na sua rotina. Elas se tornarão parte natural da sua vida, realizadas com leveza e autenticidade, porque já farão parte de quem você é.
+        </div>
+
+        <p class="storage-note">Tudo o que você marcar ou escrever nas próximas abas fica salvo automaticamente neste dispositivo e só é apagado quando você toca em "Apagar".</p>
+      </div>
+    </section>
+
+    <!-- PAINEL 2 — AÇÕES DIÁRIAS -->
+    <section class="panel" id="panel-daily">
+      <div class="section-card">
+        <div class="section-head">
+          <span class="section-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><line x1="3" y1="9.5" x2="21" y2="9.5"/><line x1="8" y1="3" x2="8" y2="6.5"/><line x1="16" y1="3" x2="16" y2="6.5"/><rect x="6.3" y="12" width="2.6" height="2.6" rx="0.6" fill="currentColor" stroke="none"/><rect x="10.7" y="12" width="2.6" height="2.6" rx="0.6" fill="currentColor" stroke="none"/><rect x="15.1" y="12" width="2.6" height="2.6" rx="0.6" fill="currentColor" stroke="none"/><rect x="6.3" y="16" width="2.6" height="2.6" rx="0.6" fill="currentColor" stroke="none"/><rect x="10.7" y="16" width="2.6" height="2.6" rx="0.6" fill="currentColor" stroke="none"/></svg>
+          </span>
+          <h2 class="section-title">AÇÕES DIÁRIAS</h2>
+        </div>
+        <p class="section-sub">(Marque um ✓ após concluir)</p>
+
+        <div class="progress-wrap">
+          <div class="progress-track"><div class="progress-fill" id="dailyProgressFill"></div></div>
+          <span class="progress-label" id="dailyProgressLabel">0 de 7</span>
+        </div>
+
+        <div class="check-list" id="dailyList">
+          <label class="check-row" data-id="d1">
+            <input type="checkbox" class="check-input" data-id="d1">
+            <span class="check-box"><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,5"/></svg></span>
+            <span class="check-text">
+              <span class="check-title">Olhar-se no espelho e afirmar algo positivo sobre si mesma.</span>
+              <span class="check-desc">Reforça sua autoconfiança com palavras de valor pessoal.</span>
+            </span>
+          </label>
+
+          <label class="check-row" data-id="d2">
+            <input type="checkbox" class="check-input" data-id="d2">
+            <span class="check-box"><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,5"/></svg></span>
+            <span class="check-text">
+              <span class="check-title">Dizer 'não' para algo que não deseja fazer.</span>
+              <span class="check-desc">Exercita o estabelecimento de limites saudáveis.</span>
+            </span>
+          </label>
+
+          <label class="check-row" data-id="d3">
+            <input type="checkbox" class="check-input" data-id="d3">
+            <span class="check-box"><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,5"/></svg></span>
+            <span class="check-text">
+              <span class="check-title">Praticar a escuta ativa em uma conversa.</span>
+              <span class="check-desc">Melhora sua capacidade de se comunicar com atenção e empatia.</span>
+            </span>
+          </label>
+
+          <label class="check-row" data-id="d4">
+            <input type="checkbox" class="check-input" data-id="d4">
+            <span class="check-box"><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,5"/></svg></span>
+            <span class="check-text">
+              <span class="check-title">Anotar uma conquista do dia, por menor que seja.</span>
+              <span class="check-desc">Valoriza suas realizações e fortalece o sentimento de competência.</span>
+            </span>
+          </label>
+
+          <label class="check-row" data-id="d5">
+            <input type="checkbox" class="check-input" data-id="d5">
+            <span class="check-box"><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,5"/></svg></span>
+            <span class="check-text">
+              <span class="check-title">Fazer algo por si mesma, sem culpa.</span>
+              <span class="check-desc">Cultiva o autocuidado e o merecimento.</span>
+            </span>
+          </label>
+
+          <label class="check-row" data-id="d6">
+            <input type="checkbox" class="check-input" data-id="d6">
+            <span class="check-box"><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,5"/></svg></span>
+            <span class="check-text">
+              <span class="check-title">Usar uma postura corporal confiante (ombros retos, olhar direto).</span>
+              <span class="check-desc">O corpo influencia a mente, gerando sensação de segurança.</span>
+            </span>
+          </label>
+
+          <label class="check-row" data-id="d7">
+            <input type="checkbox" class="check-input" data-id="d7">
+            <span class="check-box"><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,5"/></svg></span>
+            <span class="check-text">
+              <span class="check-title">Expressar sua opinião, mesmo que seja diferente da maioria.</span>
+              <span class="check-desc">Afirma sua individualidade e autonomia.</span>
+            </span>
+          </label>
+        </div>
+
+        <button class="clear-btn" id="clearDailyBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M8,6 V4 a2,2 0 0 1 2,-2 h4 a2,2 0 0 1 2,2 v2 M19,6 l-1,14 a2,2 0 0 1 -2,2 H8 a2,2 0 0 1 -2,-2 L5,6"/></svg>
+          Apagar ações diárias
+        </button>
+      </div>
+    </section>
+
+    <!-- PAINEL 3 — AÇÕES SEMANAIS -->
+    <section class="panel" id="panel-weekly">
+      <div class="section-card">
+        <div class="section-head">
+          <span class="section-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="13" width="3.6" height="7.5" rx="0.8"/><rect x="10.2" y="9" width="3.6" height="11.5" rx="0.8"/><rect x="17.4" y="5.5" width="3.6" height="15" rx="0.8"/><polyline points="3,9 9,4 14,7.5 21,2"/><polyline points="16.5,2 21,2 21,6.3"/></svg>
+          </span>
+          <h2 class="section-title">AÇÕES SEMANAIS</h2>
+        </div>
+        <p class="section-sub">(Realize se concluir as diárias)</p>
+
+        <div class="progress-wrap">
+          <div class="progress-track"><div class="progress-fill" id="weeklyProgressFill"></div></div>
+          <span class="progress-label" id="weeklyProgressLabel">0 de 3</span>
+        </div>
+
+        <div class="check-list" id="weeklyList">
+          <label class="check-row" data-id="w1">
+            <input type="checkbox" class="check-input" data-id="w1">
+            <span class="check-box"><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,5"/></svg></span>
+            <span class="check-text">
+              <span class="check-title">Revisar seus progressos da semana.</span>
+              <span class="check-desc">Refletir sobre suas conquistas ajuda a perceber o crescimento pessoal.</span>
+            </span>
+          </label>
+
+          <label class="check-row" data-id="w2">
+            <input type="checkbox" class="check-input" data-id="w2">
+            <span class="check-box"><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,5"/></svg></span>
+            <span class="check-text">
+              <span class="check-title">Fazer algo que sempre teve medo de tentar.</span>
+              <span class="check-desc">Enfrentar desafios fortalece a coragem e expande seus limites.</span>
+            </span>
+          </label>
+
+          <label class="check-row" data-id="w3">
+            <input type="checkbox" class="check-input" data-id="w3">
+            <span class="check-box"><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,5"/></svg></span>
+            <span class="check-text">
+              <span class="check-title">Ter uma conversa honesta sobre seus sentimentos com alguém de confiança.</span>
+              <span class="check-desc">Praticar a vulnerabilidade consciente promove conexões autênticas e segurança emocional.</span>
+            </span>
+          </label>
+        </div>
+
+        <button class="clear-btn" id="clearWeeklyBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M8,6 V4 a2,2 0 0 1 2,-2 h4 a2,2 0 0 1 2,2 v2 M19,6 l-1,14 a2,2 0 0 1 -2,2 H8 a2,2 0 0 1 -2,-2 L5,6"/></svg>
+          Apagar ações semanais
+        </button>
+
+        <div class="dark-banner">
+          <span class="banner-pill">Importância de Cada Passo</span>
+          <p class="banner-text">Cada pequena ação diária constrói um alicerce para sua segurança emocional. Ao praticar de forma consistente, você transforma comportamentos simples em hábitos poderosos. As ações semanais são oportunidades de aprofundamento, ajudando a consolidar sua evolução e a reconhecer sua força interior.</p>
+        </div>
+
+        <div class="quote-card">
+          <span class="quote-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#211631" stroke-width="1.3" stroke-linejoin="round"><path d="M12 6.5 C 9 1.5, 1 3, 4 9 C 6 13, 10 12, 12 9.5"/><path d="M12 6.5 C 15 1.5, 23 3, 20 9 C 18 13, 14 12, 12 9.5"/><line x1="12" y1="6.5" x2="12" y2="18" stroke-linecap="round"/><path d="M12 13 C 10.5 13 9.5 14.3 9.5 15.5" stroke-linecap="round"/><path d="M12 15.5 C 13.5 15.5 14.5 16.6 14.5 17.8" stroke-linecap="round"/></svg>
+          </span>
+          <p class="quote-text"><strong>Lembre-se:</strong> a autoconfiança não é um ponto de chegada, mas um caminho que você percorre todos os dias.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAINEL 4 — ANOTAÇÕES -->
+    <section class="panel" id="panel-notes">
+      <div class="section-card">
+        <div class="section-head">
+          <span class="section-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5 L4.8 16 L16.5 4.3 a1.8 1.8 0 0 1 2.5 0 l0.7 0.7 a1.8 1.8 0 0 1 0 2.5 L8 19.2 Z"/><line x1="14" y1="6.8" x2="17.5" y2="10.3"/></svg>
+          </span>
+          <h2 class="section-title">ANOTAÇÕES</h2>
+        </div>
+        <p class="notes-intro">Use este espaço para registrar reflexões, conquistas e o que quiser lembrar no seu caminho. Cada anotação pode ter sua própria data e horário.</p>
+
+        <div class="notes-block">
+          <div class="notes-label-row">
+            <span class="notes-label">Anotação 1</span>
+            <span class="save-indicator" id="saveIndicator1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,5"/></svg>
+              Salvo
+            </span>
+          </div>
+          <div class="notes-datetime-row">
+            <span class="datetime-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12,7 12,12 16,14"/></svg>
+            </span>
+            <input type="datetime-local" class="notes-datetime" id="noteDate1">
+            <button class="now-btn" id="noteNowBtn1" type="button">Agora</button>
+          </div>
+          <textarea class="notes-textarea" id="note1" placeholder="Escreva suas anotações aqui"></textarea>
+        </div>
+
+        <div class="notes-block">
+          <div class="notes-label-row">
+            <span class="notes-label">Anotação 2</span>
+            <span class="save-indicator" id="saveIndicator2">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,5"/></svg>
+              Salvo
+            </span>
+          </div>
+          <div class="notes-datetime-row">
+            <span class="datetime-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12,7 12,12 16,14"/></svg>
+            </span>
+            <input type="datetime-local" class="notes-datetime" id="noteDate2">
+            <button class="now-btn" id="noteNowBtn2" type="button">Agora</button>
+          </div>
+          <textarea class="notes-textarea" id="note2" placeholder="Escreva suas anotações aqui"></textarea>
+        </div>
+
+        <div class="notes-block">
+          <div class="notes-label-row">
+            <span class="notes-label">Anotação 3</span>
+            <span class="save-indicator" id="saveIndicator3">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,5"/></svg>
+              Salvo
+            </span>
+          </div>
+          <div class="notes-datetime-row">
+            <span class="datetime-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12,7 12,12 16,14"/></svg>
+            </span>
+            <input type="datetime-local" class="notes-datetime" id="noteDate3">
+            <button class="now-btn" id="noteNowBtn3" type="button">Agora</button>
+          </div>
+          <textarea class="notes-textarea" id="note3" placeholder="Escreva suas anotações aqui"></textarea>
+        </div>
+
+        <button class="clear-btn" id="clearNotesBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M8,6 V4 a2,2 0 0 1 2,-2 h4 a2,2 0 0 1 2,2 v2 M19,6 l-1,14 a2,2 0 0 1 -2,2 H8 a2,2 0 0 1 -2,-2 L5,6"/></svg>
+          Apagar anotações
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-panel="home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 11 L12 4 L20.5 11"/><path d="M5.5 9.5 V19 a1 1 0 0 0 1 1 H17.5 a1 1 0 0 0 1 -1 V9.5"/><line x1="10" y1="20" x2="10" y2="14.5"/><line x1="14" y1="20" x2="14" y2="14.5"/></svg>
+      <span>Início</span>
+    </button>
+    <button class="nav-btn" data-panel="daily">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><line x1="3" y1="9.5" x2="21" y2="9.5"/><line x1="8" y1="3" x2="8" y2="6.5"/><line x1="16" y1="3" x2="16" y2="6.5"/></svg>
+      <span>Diárias</span>
+    </button>
+    <button class="nav-btn" data-panel="weekly">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="13" width="3.6" height="7.5" rx="0.8"/><rect x="10.2" y="9" width="3.6" height="11.5" rx="0.8"/><rect x="17.4" y="5.5" width="3.6" height="15" rx="0.8"/><polyline points="3,9 9,4 14,7.5 21,2"/></svg>
+      <span>Semanais</span>
+    </button>
+    <button class="nav-btn" data-panel="notes">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5 L4.8 16 L16.5 4.3 a1.8 1.8 0 0 1 2.5 0 l0.7 0.7 a1.8 1.8 0 0 1 0 2.5 L8 19.2 Z"/></svg>
+      <span>Anotações</span>
+    </button>
+  </nav>
+
+</div>
+
+<!-- MODAL: CONFIRMAÇÃO -->
+<div class="modal-overlay hidden" id="confirmModal">
+  <div class="modal-card confirm-card">
+    <div class="confirm-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M8,6 V4 a2,2 0 0 1 2,-2 h4 a2,2 0 0 1 2,2 v2 M19,6 l-1,14 a2,2 0 0 1 -2,2 H8 a2,2 0 0 1 -2,-2 L5,6"/></svg>
+    </div>
+    <p class="confirm-text" id="confirmText">Tem certeza que deseja apagar? Essa ação não pode ser desfeita.</p>
+    <div class="confirm-actions">
+      <button class="btn btn-cancel" id="confirmCancelBtn">Cancelar</button>
+      <button class="btn btn-danger" id="confirmOkBtn">Apagar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,5"/></svg>
+  <span id="toastText">Apagado</span>
+</div>
+
+<script>
+(function(){
+
+  /* ---------------- STORAGE LAYER ----------------
+     Usa window.storage quando disponível (artifacts da Claude.ai),
+     com fallback automático para localStorage quando o arquivo é
+     aberto fora desse ambiente (ex: salvo no computador/celular). */
+
+  var hasAppStorage = !!(window.storage && typeof window.storage.get === 'function');
+
+  async function storageGet(key){
+    if(hasAppStorage){
+      try{
+        var res = await window.storage.get(key, false);
+        return res ? res.value : null;
+      }catch(e){
+        return null;
+      }
+    }else{
+      try{ return localStorage.getItem(key); }catch(e){ return null; }
+    }
+  }
+
+  async function storageSet(key, value){
+    if(hasAppStorage){
+      try{
+        var res = await window.storage.set(key, value, false);
+        return !!res;
+      }catch(e){
+        console.error('Falha ao salvar', key, e);
+        return false;
+      }
+    }else{
+      try{ localStorage.setItem(key, value); return true; }catch(e){ return false; }
+    }
+  }
+
+  async function storageDelete(key){
+    if(hasAppStorage){
+      try{ await window.storage.delete(key, false); return true; }catch(e){ return false; }
+    }else{
+      try{ localStorage.removeItem(key); return true; }catch(e){ return false; }
+    }
+  }
+
+  /* ---------------- STATE KEYS ---------------- */
+  var KEY_DAILY = 'mmp-daily-actions';
+  var KEY_WEEKLY = 'mmp-weekly-actions';
+  var KEY_NOTES = 'mmp-notes-v2';
+
+  var dailyState = {};
+  var weeklyState = {};
+  var notesState = {
+    1:{ text:'', dt:'' },
+    2:{ text:'', dt:'' },
+    3:{ text:'', dt:'' }
+  };
+
+  /* ---------------- HELPERS ---------------- */
+  function $(sel){ return document.querySelector(sel); }
+  function $all(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+
+  var toastEl = $('#toast');
+  var toastTextEl = $('#toastText');
+  var toastTimer = null;
+  function showToast(msg){
+    toastTextEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 2200);
+  }
+
+  /* ---------------- DAILY / WEEKLY CHECKLISTS ---------------- */
+  function applyCheckState(input, checked){
+    input.checked = checked;
+    var row = input.closest('.check-row');
+    if(row){ row.classList.toggle('done', !!checked); }
+  }
+
+  function updateProgress(prefix, state, total, fillEl, labelEl){
+    var count = 0;
+    Object.keys(state).forEach(function(k){ if(state[k]) count++; });
+    var pct = total ? Math.round((count/total)*100) : 0;
+    fillEl.style.width = pct + '%';
+    labelEl.textContent = count + ' de ' + total;
+  }
+
+  function refreshDailyUI(){
+    $all('#dailyList .check-input').forEach(function(input){
+      applyCheckState(input, !!dailyState[input.dataset.id]);
+    });
+    updateProgress('d', dailyState, 7, $('#dailyProgressFill'), $('#dailyProgressLabel'));
+  }
+
+  function refreshWeeklyUI(){
+    $all('#weeklyList .check-input').forEach(function(input){
+      applyCheckState(input, !!weeklyState[input.dataset.id]);
+    });
+    updateProgress('w', weeklyState, 3, $('#weeklyProgressFill'), $('#weeklyProgressLabel'));
+  }
+
+  $all('#dailyList .check-input').forEach(function(input){
+    input.addEventListener('change', function(){
+      dailyState[input.dataset.id] = input.checked;
+      applyCheckState(input, input.checked);
+      updateProgress('d', dailyState, 7, $('#dailyProgressFill'), $('#dailyProgressLabel'));
+      storageSet(KEY_DAILY, JSON.stringify(dailyState));
+    });
+  });
+
+  $all('#weeklyList .check-input').forEach(function(input){
+    input.addEventListener('change', function(){
+      weeklyState[input.dataset.id] = input.checked;
+      applyCheckState(input, input.checked);
+      updateProgress('w', weeklyState, 3, $('#weeklyProgressFill'), $('#weeklyProgressLabel'));
+      storageSet(KEY_WEEKLY, JSON.stringify(weeklyState));
+    });
+  });
+
+  /* ---------------- NOTES ---------------- */
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function nowLocalDatetime(){
+    var d = new Date();
+    return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes());
+  }
+
+  function flashSaved(el){
+    el.classList.add('show');
+    setTimeout(function(){ el.classList.remove('show'); }, 1500);
+  }
+
+  var notesTimer = null;
+  function persistNotes(showIndicator){
+    clearTimeout(notesTimer);
+    notesTimer = setTimeout(function(){
+      storageSet(KEY_NOTES, JSON.stringify(notesState)).then(function(ok){
+        if(ok && showIndicator){ flashSaved(showIndicator); }
+      });
+    }, 450);
+  }
+
+  [1,2,3].forEach(function(n){
+    var textEl = $('#note'+n);
+    var dateEl = $('#noteDate'+n);
+    var nowBtn = $('#noteNowBtn'+n);
+    var saveInd = $('#saveIndicator'+n);
+
+    textEl.addEventListener('input', function(){
+      notesState[n].text = textEl.value;
+      if(!dateEl.value && textEl.value.trim()!==''){
+        dateEl.value = nowLocalDatetime();
+        notesState[n].dt = dateEl.value;
+      }
+      persistNotes(saveInd);
+    });
+
+    dateEl.addEventListener('change', function(){
+      notesState[n].dt = dateEl.value;
+      persistNotes(saveInd);
+    });
+
+    nowBtn.addEventListener('click', function(){
+      dateEl.value = nowLocalDatetime();
+      notesState[n].dt = dateEl.value;
+      persistNotes(saveInd);
+    });
+  });
+
+  /* ---------------- TAB NAVIGATION ---------------- */
+  var navBtns = $all('.nav-btn');
+  var panels = { home: $('#panel-home'), daily: $('#panel-daily'), weekly: $('#panel-weekly'), notes: $('#panel-notes') };
+
+  navBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var target = btn.dataset.panel;
+      navBtns.forEach(function(b){ b.classList.toggle('active', b===btn); });
+      Object.keys(panels).forEach(function(k){ panels[k].classList.toggle('active', k===target); });
+      $('.app-main').scrollTop = 0;
+    });
+  });
+
+  /* ---------------- CONFIRM MODAL ---------------- */
+  var confirmModal = $('#confirmModal');
+  var confirmText = $('#confirmText');
+  var confirmOkBtn = $('#confirmOkBtn');
+  var pendingAction = null;
+
+  function openConfirm(message, action){
+    confirmText.textContent = message;
+    pendingAction = action;
+    confirmModal.classList.remove('hidden');
+  }
+  function closeConfirm(){
+    confirmModal.classList.add('hidden');
+    pendingAction = null;
+  }
+  $('#confirmCancelBtn').addEventListener('click', closeConfirm);
+  confirmModal.addEventListener('click', function(e){ if(e.target===confirmModal) closeConfirm(); });
+  confirmOkBtn.addEventListener('click', async function(){
+    if(pendingAction){ await pendingAction(); }
+    closeConfirm();
+  });
+
+  $('#clearDailyBtn').addEventListener('click', function(){
+    openConfirm('Tem certeza que deseja apagar todas as ações diárias marcadas? Essa ação não pode ser desfeita.', async function(){
+      dailyState = {};
+      refreshDailyUI();
+      await storageSet(KEY_DAILY, JSON.stringify(dailyState));
+      showToast('Ações diárias apagadas');
+    });
+  });
+
+  $('#clearWeeklyBtn').addEventListener('click', function(){
+    openConfirm('Tem certeza que deseja apagar todas as ações semanais marcadas? Essa ação não pode ser desfeita.', async function(){
+      weeklyState = {};
+      refreshWeeklyUI();
+      await storageSet(KEY_WEEKLY, JSON.stringify(weeklyState));
+      showToast('Ações semanais apagadas');
+    });
+  });
+
+  $('#clearNotesBtn').addEventListener('click', function(){
+    openConfirm('Tem certeza que deseja apagar suas 3 anotações e respectivas datas? Essa ação não pode ser desfeita.', async function(){
+      notesState = { 1:{text:'',dt:''}, 2:{text:'',dt:''}, 3:{text:'',dt:''} };
+      [1,2,3].forEach(function(n){
+        $('#note'+n).value = '';
+        $('#noteDate'+n).value = '';
+      });
+      await storageSet(KEY_NOTES, JSON.stringify(notesState));
+      showToast('Anotações apagadas');
+    });
+  });
+
+  /* ---------------- INITIAL LOAD ---------------- */
+  async function init(){
+    try{
+      var savedDaily = await storageGet(KEY_DAILY);
+      if(savedDaily){ dailyState = JSON.parse(savedDaily); }
+    }catch(e){}
+    try{
+      var savedWeekly = await storageGet(KEY_WEEKLY);
+      if(savedWeekly){ weeklyState = JSON.parse(savedWeekly); }
+    }catch(e){}
+    try{
+      var savedNotes = await storageGet(KEY_NOTES);
+      if(savedNotes){
+        var parsed = JSON.parse(savedNotes);
+        [1,2,3].forEach(function(n){
+          if(parsed[n]){
+            notesState[n].text = parsed[n].text || '';
+            notesState[n].dt = parsed[n].dt || '';
+          }
+        });
+      }
+    }catch(e){}
+
+    refreshDailyUI();
+    refreshWeeklyUI();
+    [1,2,3].forEach(function(n){
+      $('#note'+n).value = notesState[n].text;
+      $('#noteDate'+n).value = notesState[n].dt;
+    });
+  }
+
+  init();
+
+})();
+</script>
+</body>
+</html>
